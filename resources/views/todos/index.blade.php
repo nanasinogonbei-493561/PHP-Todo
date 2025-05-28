@@ -76,7 +76,7 @@
         <div class='create-btn'>
             <a href="{{ route('todos.create') }}" class="btn btn-primary">新規作成</a>
         </div>
-            @if(count($todos) > 0)
+            @if(!empty($todos) &&count($todos) > 0)
               @foreach($todos as $todo)
               <div class="todo-item">
                   <div class="todo-title">{{ $todo->title }}</div>

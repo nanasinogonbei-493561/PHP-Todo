@@ -8,3 +8,7 @@ Route::get('/', function () {
 });
 
 Route::resource('todos', TodoController::class)->except(['show']);
+
+Route::get('/', function () {
+    return view('todos.index');
+});
