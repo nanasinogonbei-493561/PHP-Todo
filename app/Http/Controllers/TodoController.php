@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Todo;
 
 class TodoController extends Controller
 {
@@ -54,7 +55,7 @@ class TodoController extends Controller
         'title' => 'required',
        ]);
 
-       $todo = Todo::findOrFail($is);
+       $todo = Todo::findOrFail($id);
        $todo->update($request->all());
        return redirect()->route('todos.index');
     }
