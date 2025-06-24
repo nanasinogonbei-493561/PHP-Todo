@@ -15,5 +15,11 @@ class Todo extends Model
     protected $fillable = [
         'title', 
         'description',
+        'category_id', 
     ];
+
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(Category::class);
+    }
 }
