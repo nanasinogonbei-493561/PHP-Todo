@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Todo;
+use App\Models\Category;
 
 class TodoController extends Controller
 {
@@ -12,8 +13,9 @@ class TodoController extends Controller
      */
     public function index()
     {
-        $todos = Todo::all();
-        return view('todos.index', compact('todos'));
+        $todos = Todo::with('category')->get();
+        $categories = Category::all();
+        return view('todos.index', compact('todos', 'categories'));
     }
 
     /**
@@ -21,7 +23,8 @@ class TodoController extends Controller
      */
     public function create()
     {
-        return view('todos.create');
+        $categories = Category::all();
+        return view('todos.create', compact('categories'));
     }
 
     /**
@@ -31,6 +34,7 @@ class TodoController extends Controller
     {
         $request->validate([
             'title' => 'required',
+            'category_id' => 'nullable|exists:categories,id',
         ]);
 
         Todo::create($request->all());
@@ -43,7 +47,8 @@ class TodoController extends Controller
     public function edit(string $id)
     {
         $todo = Todo::findOrFail($id);
-        return view('todos.edit', compact('todo'));
+        $categories = Category::all();
+        return view('todos.edit', compact('todo', 'categories'));
     }
 
     /**
@@ -53,6 +58,7 @@ class TodoController extends Controller
     {
        $request->validate([
         'title' => 'required',
+        'category_id' => 'nullable|exists:categories,id',
        ]);
 
        $todo = Todo::findOrFail($id);
