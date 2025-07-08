@@ -29,7 +29,7 @@
             font-weight: bold;
         }
 
-        input[type="text"], textarea {
+        input[type="text"], textarea, select {
             width: 100%;
             padding: 8px;
             border: 1px solid #ddd;
@@ -62,11 +62,26 @@
             color: #dc3545;
             margin-top: 5px;
         }
+
+        .nav-links {
+            margin-bottom: 20px;
+        }
+
+        .nav-links a {
+            margin-right: 15px;
+            color: #007bff;
+            text-decoration: none;
+        }
     </style>
 </head>
 <body>
     <div class="todo-container">
-    <h1>Todo作成</h1>
+        <h1>Todo作成</h1>
+
+        <div class="nav-links">
+            <a href="{{ route('todos.index') }}">Todo一覧</a>
+            <a href="{{ route('categories.index') }}">カテゴリ一覧</a>
+        </div>
 
         @if($errors->any())
            <div class="alert-danger">
@@ -90,6 +105,21 @@
             <div class="form-group">
                 <label for="description">説明</label>
                 <textarea name="description" id="description">{{ old('description') }}</textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="category_id">カテゴリ</label>
+                <select name="category_id" id="category_id">
+                    <option value="">カテゴリを選択してください</option>
+                    @foreach($categories as $category)
+                        <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
+                            {{ $category->name }}
+                        </option>
+                    @endforeach
+                </select>
+                @error('category_id')
+                    <div class="error">{{ $message }}</div>
+                @enderror
             </div>
 
             <div class="form-group">

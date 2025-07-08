@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todo編集</title>
+    <title>カテゴリ編集</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -15,8 +15,8 @@
             margin-bottom: 20px;
         }
 
-        .todo-container {
-            max-width: 800px;
+        .category-container {
+            max-width: 600px;
         }
 
         .form-group {
@@ -29,15 +29,17 @@
             font-weight: bold;
         }
 
-        input[type="text"], textarea, select {
+        input[type="text"], input[type="color"] {
             width: 100%;
             padding: 8px;
             border: 1px solid #ddd;
             border-radius: 3px;
         }
 
-        textarea {
-            height: 100px;
+        input[type="color"] {
+            width: 60px;
+            height: 40px;
+            padding: 0;
         }
 
         .btn {
@@ -72,15 +74,25 @@
             color: #007bff;
             text-decoration: none;
         }
+
+        .color-preview {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid #ddd;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
     </style>
 </head>
 <body>
-    <div class="todo-container">
-        <h1>Todo編集</h1>
+    <div class="category-container">
+        <h1>カテゴリ編集</h1>
 
         <div class="nav-links">
-            <a href="{{ route('todos.index') }}">Todo一覧</a>
             <a href="{{ route('categories.index') }}">カテゴリ一覧</a>
+            <a href="{{ route('todos.index') }}">Todo一覧</a>
         </div>
 
         @if($errors->any())
@@ -93,42 +105,40 @@
             </div>
         @endif
 
-        <form action="{{ route('todos.update', $todo->id) }}" method="POST">
+        <form action="{{ route('categories.update', $category->id) }}" method="POST">
             @csrf
             @method('PUT')
 
             <div class="form-group">
-                <label for="title">タイトル</label>
-                <input type="text" name="title" id="title" value="{{ old('title', $todo->title) }}" required>
-                @error('title')
+                <label for="name">カテゴリ名 <span style="color: red;">*</span></label>
+                <input type="text" name="name" id="name" value="{{ old('name', $category->name) }}" required>
+                @error('name')
                     <div class="error">{{ $message }}</div>
                 @enderror
             </div>
 
             <div class="form-group">
-                <label for="description">説明</label>
-                <textarea name="description" id="description">{{ old('description', $todo->description) }}</textarea>
-            </div>
-
-            <div class="form-group">
-                <label for="category_id">カテゴリ</label>
-                <select name="category_id" id="category_id">
-                    <option value="">カテゴリを選択してください</option>
-                    @foreach($categories as $category)
-                        <option value="{{ $category->id }}" {{ old('category_id', $todo->category_id) == $category->id ? 'selected' : '' }}>
-                            {{ $category->name }}
-                        </option>
-                    @endforeach
-                </select>
-                @error('category_id')
+                <label for="color">カテゴリ色</label>
+                <input type="color" name="color" id="color" value="{{ old('color', $category->color ?? '#007bff') }}" onchange="updatePreview()">
+                <div class="color-preview" id="colorPreview" style="background-color: {{ old('color', $category->color ?? '#007bff') }};"></div>
+                @error('color')
                     <div class="error">{{ $message }}</div>
                 @enderror
             </div>
 
             <div class="form-group">
                 <button type="submit" class="btn btn-primary">更新</button>
-                <a href="{{ route('todos.index') }}" class="btn btn-secondary">戻る</a>
+                <a href="{{ route('categories.index') }}" class="btn btn-secondary">戻る</a>
             </div>
         </form>
+    </div>
+
+    <script>
+        function updatePreview() {
+            const colorInput = document.getElementById('color');
+            const preview = document.getElementById('colorPreview');
+            preview.style.backgroundColor = colorInput.value;
+        }
+    </script>
 </body>
-</html>
+</html> 

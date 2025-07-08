@@ -64,6 +64,25 @@
             margin-bottom: 20px;
         }
 
+        .nav-links {
+            margin-bottom: 20px;
+        }
+
+        .nav-links a {
+            margin-right: 15px;
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .todo-category {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            color: white;
+            margin-left: 10px;
+        }
+
         form {
             display: inline;
         }
@@ -73,13 +92,25 @@
     <div class="todo-container">
         <h1>Todo一覧</h1>
 
+        <div class="nav-links">
+            <a href="{{ route('categories.index') }}">カテゴリ一覧</a>
+            <a href="{{ route('categories.create') }}">カテゴリ作成</a>
+        </div>
+
         <div class='create-btn'>
             <a href="{{ route('todos.create') }}" class="btn btn-primary">新規作成</a>
         </div>
             @if(!empty($todos) &&count($todos) > 0)
               @foreach($todos as $todo)
               <div class="todo-item">
-                  <div class="todo-title">{{ $todo->title }}</div>
+                  <div class="todo-title">
+                      {{ $todo->title }}
+                      @if($todo->category)
+                          <span class="todo-category" style="background-color: {{ $todo->category->color ?? '#007bff' }};">
+                              {{ $todo->category->name }}
+                          </span>
+                      @endif
+                  </div>
                   @if($todo->description)
                   <div class="todo-description">{{ $todo->description }}</div>
                   @endif
